@@ -8,8 +8,9 @@ import LeagueCard from "../components/LeagueCard";
 import Navbar from "../components/Navbar";
 import ShirtCard from "../components/ShirtCard";
 import { shirtData, leagueData, collectionData } from "../lib/data";
+import axios from "../lib/axios";
 
-export default function Home() {
+export default function Home({ products }) {
   return (
     <div>
       <Hero />
@@ -48,18 +49,8 @@ export default function Home() {
           </div>
         </div>
         <div className="mt-5 flex overflow-x-auto gap-2 w-[100%] scrollbar-hide">
-          {shirtData.map((shirt, idx) => {
-            const { img, newPrice, oldPrice, title, subtitle } = shirt;
-            return (
-              <ShirtCard
-                img={img}
-                title={title}
-                newPrice={newPrice}
-                oldPrice={oldPrice}
-                subtitle={subtitle}
-                key={idx}
-              />
-            );
+          {products.map((product, idx) => {
+            return <ShirtCard product={product} key={idx} />;
           })}
         </div>
       </div>
@@ -137,4 +128,15 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+export async function getStaticProps() {
+  const res = await axios.get("products");
+  const products = await res.data.products.data;
+
+  return {
+    props: {
+      products,
+    },
+  };
 }
