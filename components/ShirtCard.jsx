@@ -23,8 +23,8 @@ function ShirtCard({ product }) {
             <br />
           )}
           <div className="flex gap-3 mt-2">
-            {/* <p className="font-semibold">{newPrice}</p>
-            {oldPrice && (
+            <p className="font-semibold">€{product.variants[0]?.price}</p>
+            {/* {oldPrice && (
               <p className="line-through text-red-500 text-sm">{oldPrice}</p>
             )} */}
           </div>

@@ -7,7 +7,7 @@ function Shirt({ product }) {
       <div className="md:flex justify-between gap-10 md:w-[85%] w-[95%] mx-auto mt-10">
         <div className="flex-[0.5]">
           <div className="relative">
-            <img src={product?.gallery[0].image} />
+            <img src={product?.gallery[0]?.image} />
             <div className="flex gap-2 mt-16 absolute bottom-4 right-4">
               <span className="w-4 h-4 md:w-8 md:h-8 border-[1px] grid place-items-center cursor-pointer">
                 <svg
@@ -41,7 +41,7 @@ function Shirt({ product }) {
           </div>
 
           <div className="flex mt-3 justify-between flex-shrink">
-            <img src={product.gallery[0].image} className="w-16 h-16" />
+            <img src={product.gallery[0]?.image} className="w-16 h-16" />
             {product.gallery.slice(1).map((item, idx) => {
               return (
                 <img
@@ -60,13 +60,15 @@ function Shirt({ product }) {
           </h2>
           <div className="flex justify-between items-center mt-5">
             <div className="flex items-center gap-5">
-              <p className="font-bold text-3xl">€30.00</p>
+              <p className="font-bold text-3xl">
+                €{product.variants[0]?.price}
+              </p>
               <p className="text-[#EE503E] line-through text-sm">€89.95</p>
               <div className="bg-[#23C353] p-1 text-white text-xs">
                 Save 67%
               </div>
             </div>
-            <div className="flex items-center gap-2 p-2 border-[0.5px] mr-2">
+            <div className="flex items-center gap-2 p-2 border-[0.5px] mr-2 cursor-pointer">
               <span>
                 <svg
                   width="12"
@@ -84,9 +86,10 @@ function Shirt({ product }) {
               <p className="hidden md:block">Add to Favorites</p>
             </div>
           </div>
-          <p className="text-[0.68rem] mt-5 md:text-sm">
-            {product.description}
-          </p>
+          <p
+            className="text-[0.68rem] mt-5 md:text-sm"
+            dangerouslySetInnerHTML={{ __html: product.description }}
+          ></p>
           <div className="mt-8 ">
             <div>
               <div className="flex justify-between items-center">
@@ -99,11 +102,16 @@ function Shirt({ product }) {
                       id="countries"
                       className="border focus:outline-none block p-2 flex-[0.8] text-xs text-gray-400 w-full"
                     >
-                      <option selected>Select shirt size</option>
-                      <option value="L">Large</option>
-                      <option value="M">Medius</option>
-                      <option value="SM">Small</option>
-                      <option value="XS">Extra small</option>
+                      <option defaultValue>Select shirt size</option>
+                      {product.attributes[0]?.product_attribute_values.map(
+                        (size) => {
+                          return (
+                            <option value={size.name} key={size.attribute_id}>
+                              {size.name}
+                            </option>
+                          );
+                        }
+                      )}
                     </select>
                   </div>
                   <p className="bg-[#F5F5F6] px-1 py-3 font-bold text-xs flex-[0.3] text-center cursor-pointer">
