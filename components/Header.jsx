@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import axios from "../lib/axios";
 
 function Header() {
+  const [announcements, setAnnouncements] = useState([]);
+
+  useEffect(() => {
+    fetchAnnouncement();
+  }, []);
+
+  const fetchAnnouncement = async () => {
+    const res = await axios.get("announcement");
+    const data = res.data.announcements.data;
+    setAnnouncements(data);
+  };
   return (
     <div className="bg-black text-white flex items-center justify-between">
       <div className="flex items-center gap-1 md:px-10 px-2 py-2 bg-[#242425] cursor-pointer">
@@ -28,7 +40,14 @@ function Header() {
         </span>
       </div>
       <p className="text-[0.62rem] text-[#ffffffcc]">
-        SALES BEGIN•FREE SHIPPING ON ALL ORDERS
+        {announcements.map((announcement) => {
+          return (
+            <span key={announcement.id} className="capitalize">
+              {announcement.title}•
+            </span>
+          );
+        })}
+        {/* SALES BEGIN•FREE SHIPPING ON ALL ORDERS */}
       </p>
       <div className="bg-[#27B03F] flex items-center gap-2 md:px-10 px-2 py-2 cursor-pointer">
         <Image

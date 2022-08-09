@@ -10,7 +10,8 @@ import ShirtCard from "../components/ShirtCard";
 import { shirtData, leagueData, collectionData } from "../lib/data";
 import axios from "../lib/axios";
 
-export default function Home({ products }) {
+export default function Home({ products, leagues }) {
+  console.log(leagues);
   return (
     <div>
       <Hero />
@@ -59,10 +60,12 @@ export default function Home({ products }) {
           Country Leagues
         </h1>
         <div className="mt-10 grid md:grid-cols-5 grid-cols-2 gap-2 gap-y-4">
-          {leagueData.map((league, idx) => {
-            const { title, img } = league;
-            return <LeagueCard title={title} img={img} key={idx} />;
-          })}
+          {leagues
+            .filter((item) => item.type === "none")[0]
+            .sub_categories.map((league) => {
+              const { id, title, image } = league;
+              return <LeagueCard title={title} image={image} key={id} />;
+            })}
         </div>
       </div>
       <div className="md:px-16 px-5 mt-16">
@@ -134,9 +137,13 @@ export async function getStaticProps() {
   const res = await axios.get("products");
   const products = await res.data.products.data;
 
+  const leagueRes = await axios.get("product-category");
+  const leagues = await leagueRes.data.categories.data;
+
   return {
     props: {
       products,
+      leagues,
     },
   };
 }
